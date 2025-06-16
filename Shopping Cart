@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+interface Checkout {
+    double computeTotal(double price, int quantity);
+}
+
+abstract class Item {
+    String name;
+    double price;
+    Item(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+    abstract void showDetails();
+}
+
+class Product extends Item implements Checkout {
+    Product(String name, double price) {
+        super(name, price);
+    }
+
+    public double computeTotal(double price, int quantity) {
+        return price * quantity;
+    }
+
+    void showDetails() {
+        System.out.println("Item: " + name + ", Price: ₱" + price);
+    }
+}
+
+public class CartMain {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.print("Enter item name: ");
+            String name = sc.nextLine();
+            System.out.print("Enter price: ");
+            double price = Double.parseDouble(sc.nextLine());
+            System.out.print("Enter quantity: ");
+            int qty = Integer.parseInt(sc.nextLine());
+
+            if (qty <= 0) throw new Exception("Quantity must be positive.");
+
+            Product p = new Product(name, price);
+            p.showDetails();
+            System.out.println("Total: ₱" + p.computeTotal(price, qty));
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
