@@ -1,0 +1,47 @@
+import java.util.Scanner;
+
+interface FineCalculator {
+    double computeFine(int days);
+}
+
+abstract class User {
+    String name;
+    User(String name) {
+        this.name = name;
+    }
+    abstract void display();
+}
+
+class Borrower extends User implements FineCalculator {
+    Borrower(String name) {
+        super(name);
+    }
+
+    public double computeFine(int days) {
+        return (days > 7) ? (days - 7) * 10 : 0;
+    }
+
+    void display() {
+        System.out.println("📖 Borrower: " + name);
+    }
+}
+
+public class LibraryMain {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.print("Enter name: ");
+            String name = sc.nextLine();
+            System.out.print("Days borrowed: ");
+            int days = Integer.parseInt(sc.nextLine());
+
+            Borrower b = new Borrower(name);
+            b.display();
+            System.out.println("Fine: ₱" + b.computeFine(days));
+
+        } catch (Exception e) {
+            System.out.println("⚠️ Invalid input: " + e.getMessage());
+        }
+    }
+}
