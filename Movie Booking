@@ -1,0 +1,61 @@
+import java.util.Scanner;
+
+interface PriceCalc {
+    double getTotal(double price, int qty);
+}
+
+abstract class Movie {
+    String title;
+    Movie(String title) {
+        this.title = title;
+    }
+    abstract void showMovie();
+}
+
+class Ticket extends Movie implements PriceCalc {
+    String seatType;
+
+    Ticket(String title, String seatType) {
+        super(title);
+        this.seatType = seatType;
+    }
+
+    double getPrice() {
+        if (seatType.equalsIgnoreCase("VIP")) return 350;
+        else if (seatType.equalsIgnoreCase("Regular")) return 200;
+        else return 0;
+    }
+
+    public double getTotal(double price, int qty) {
+        return price * qty;
+    }
+
+    void showMovie() {
+        System.out.println("🎥 Movie: " + title + " (" + seatType + ")");
+    }
+}
+
+public class BookingMain {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.print("Movie title: ");
+            String title = sc.nextLine();
+            System.out.print("Seat type (VIP/Regular): ");
+            String seat = sc.nextLine();
+            System.out.print("Tickets: ");
+            int qty = Integer.parseInt(sc.nextLine());
+
+            Ticket t = new Ticket(title, seat);
+            double price = t.getPrice();
+
+            if (price == 0) throw new Exception("Invalid seat type!");
+
+            t.showMovie();
+            System.out.println("Total: ₱" + t.getTotal(price, qty));
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
