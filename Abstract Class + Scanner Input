@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+abstract class Converter {
+    abstract double convert(double input);
+}
+
+class CelsiusToFahrenheit extends Converter {
+    double convert(double c) {
+        return (c * 9/5) + 32;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Converter conv = new CelsiusToFahrenheit();
+
+        try {
+            System.out.print("Enter Celsius: ");
+            double celsius = sc.nextDouble();
+            System.out.println("Fahrenheit: " + conv.convert(celsius));
+        } catch (Exception e) {
+            System.out.println("Error: Invalid number input.");
+        }
+    }
+}
