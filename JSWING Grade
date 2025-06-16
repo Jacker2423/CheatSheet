@@ -1,0 +1,51 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class SwingStudentForm {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Student Grading System");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+
+        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
+        JTextField nameField = new JTextField();
+        JTextField score1 = new JTextField();
+        JTextField score2 = new JTextField();
+        JTextField score3 = new JTextField();
+        JButton computeBtn = new JButton("Compute Average");
+        JLabel resultLabel = new JLabel("");
+
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Score 1:"));
+        panel.add(score1);
+        panel.add(new JLabel("Score 2:"));
+        panel.add(score2);
+        panel.add(new JLabel("Score 3:"));
+        panel.add(score3);
+        panel.add(computeBtn);
+        panel.add(resultLabel);
+
+        frame.add(panel);
+        frame.setVisible(true);
+
+        computeBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String name = nameField.getText();
+                    int s1 = Integer.parseInt(score1.getText());
+                    int s2 = Integer.parseInt(score2.getText());
+                    int s3 = Integer.parseInt(score3.getText());
+
+                    double avg = (s1 + s2 + s3) / 3.0;
+                    String remark = (avg >= 75) ? "PASSED" : "FAILED";
+
+                    resultLabel.setText(name + "'s Average: " + avg + " (" + remark + ")");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(frame, "Please enter valid numbers!", "Input Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+}
