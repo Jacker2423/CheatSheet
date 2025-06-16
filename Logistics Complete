@@ -1,0 +1,101 @@
+import java.util.Scanner;
+import java.sql.*;
+
+// Interface for sale operations
+interface Transaction {
+    double calculateTotal(double price, int quantity);
+}
+
+// Abstract class for common product info
+abstract class Product {
+    String name;
+    String category;
+    double price;
+
+    Product(String name, String category, double price) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
+    }
+
+    abstract void displayInfo();
+}
+
+// Concrete class
+class SoldProduct extends Product implements Transaction {
+
+    SoldProduct(String name, String category, double price) {
+        super(name, category, price);
+    }
+
+    public double calculateTotal(double price, int quantity) {
+        return price * quantity;
+    }
+
+    void displayInfo() {
+        System.out.println("🛒 Product: " + name);
+        System.out.println("📦 Category: " + category);
+        System.out.println("💰 Price per unit: ₱" + price);
+    }
+}
+
+public class LogisticsSystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            // Input
+            System.out.print("Enter product name: ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter category (e.g. Food, Electronics): ");
+            String category = sc.nextLine();
+
+            System.out.print("Enter price: ");
+            double price = Double.parseDouble(sc.nextLine());
+
+            System.out.print("Enter quantity: ");
+            int quantity = Integer.parseInt(sc.nextLine());
+
+            // Create object
+            SoldProduct sp = new SoldProduct(name, category, price);
+            sp.displayInfo();
+
+            double total = sp.calculateTotal(price, quantity);
+            System.out.println("📈 Total cost: ₱" + total);
+
+            // Connect to DB
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/logisticsdb", "root", "1234");
+
+            String sql = "INSERT INTO sales (product, category, price, quantity, total) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, category);
+            ps.setDouble(3, price);
+            ps.setInt(4, quantity);
+            ps.setDouble(5, total);
+
+            ps.executeUpdate();
+            System.out.println("✅ Sale recorded successfully.");
+
+            con.close();
+
+        } catch (NumberFormatException e) {
+            System.out.println("❌ Invalid number format. Please enter valid numbers.");
+        } catch (SQLException e) {
+            System.out.println("❌ Database error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("❌ Unexpected error: " + e.getMessage());
+        }
+    }
+}
+
+
+//Replace "SoldProduct" with "Shipment", "Parcel", "Invoice", etc.
+
+Add boolean flags (e.g. boolean isDelivered)
+
+Add enums or ArrayList if needed
+
+Swap DB insert with display-only for offline exam//
