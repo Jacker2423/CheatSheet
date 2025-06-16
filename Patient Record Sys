@@ -1,0 +1,57 @@
+import java.util.Scanner;
+
+interface Logger {
+    void logToDatabase();
+}
+
+abstract class Person {
+    String name;
+    int age;
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    abstract void showDetails();
+}
+
+class Patient extends Person implements Logger {
+    String condition;
+
+    Patient(String name, int age, String condition) {
+        super(name, age);
+        this.condition = condition;
+    }
+
+    void showDetails() {
+        System.out.println("🩺 Patient: " + name + ", Age: " + age);
+        System.out.println("Condition: " + condition);
+    }
+
+    public void logToDatabase() {
+        System.out.println("⏺️ Saving to database... (simulated)");
+    }
+}
+
+public class PatientMain {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.print("Name: ");
+            String name = sc.nextLine();
+            System.out.print("Age: ");
+            int age = Integer.parseInt(sc.nextLine());
+            System.out.print("Condition: ");
+            String cond = sc.nextLine();
+
+            if (age < 0 || cond.isEmpty()) throw new Exception("Invalid patient data.");
+
+            Patient p = new Patient(name, age, cond);
+            p.showDetails();
+            p.logToDatabase();
+
+        } catch (Exception e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
+}
