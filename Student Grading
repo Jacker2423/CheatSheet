@@ -1,0 +1,23 @@
+interface GradeOps {
+    double computeAverage(int[] scores);
+}
+
+abstract class Person {
+    String name;
+    Person(String name) { this.name = name; }
+    abstract void showInfo();
+}
+
+class Student extends Person implements GradeOps {
+    Student(String name) { super(name); }
+
+    public double computeAverage(int[] scores) {
+        int sum = 0;
+        for (int s : scores) sum += s;
+        return (double) sum / scores.length;
+    }
+
+    void showInfo() {
+        System.out.println("Student: " + name);
+    }
+}
