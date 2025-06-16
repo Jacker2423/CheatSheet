@@ -1,0 +1,45 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class JDBCStudent {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            // Get input
+            System.out.print("Enter student name: ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter grade: ");
+            double grade = Double.parseDouble(sc.nextLine());
+
+            // Load JDBC driver (optional in newer Java versions)
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Connect to DB
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/schooldb", "root", "");
+
+            // SQL statement
+            String sql = "INSERT INTO students (name, grade) VALUES (?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setDouble(2, grade);
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Student saved to database.");
+            }
+
+            con.close();
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number entered.");
+        } catch (SQLException e) {
+            System.out.println("SQL error: " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("JDBC Driver not found.");
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e.getMessage());
+        }
+    }
+}
